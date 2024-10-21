@@ -6,10 +6,19 @@ switch:
 # gpio_in_BCM_number: name
 # example=> pin#35 = 'gpio.24' = rpi24 = BCM_19 => 19: pump
 # execute 'gpio readall' to see all gpios an theis states in console
-      19: Pump
-      26: Turbo
-      20: ph
-      21: orp
+#   relay CH 1 = GPIO 5
+#   relay CH 2 = GPIO 6
+#   relay CH 3 = GPIO 13
+#   relay CH 4 = GPIO 19
+#   relay CH 5 = GPIO 26
+#   relay CH 6 = GPIO 12
+      5: Pump
+#      6: Turbo
+      6: Vacuum
+      19: ph
+      13: orp
+      26: Light
+      12: Heater
     invert_logic: true
 
 input_boolean:
@@ -19,6 +28,10 @@ input_boolean:
   lock_muriatic:
     initial: off
     icon: mdi:lock
+  summer_mode:
+    initial: off
+    icon: mdi:snowflake-off
+    
 
 
 binary_sensor:
