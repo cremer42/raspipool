@@ -14,7 +14,9 @@
   - [Ezo orp Circuit](https://www.atlas-scientific.com/embedded-solutions/ezo-orp-circuit)
   - [EZO Carrier Board](https://www.atlas-scientific.com/carrier-boards/electrically-isolated-ezo-carrier-board-gen-2).
     -  A custom UART sensor for HA has been developed in the included code.
-- Relay Board with a minimun of [4 relays](https://aliexpress.com/item/32961638909.html) [or 6](https://aliexpress.com/item/32997012084.html)
+- Relay Board with a minimun of 4 relays.
+  - [4 Relay Hat](https://aliexpress.com/item/32961638909.html)
+  - [6 Relay Hat](https://aliexpress.com/item/32997012084.html)
   This project used the 6 relay rpi hat.
    - controlling :
     -  pump on/off and pump speed (high/low)
