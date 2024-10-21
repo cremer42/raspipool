@@ -49,7 +49,6 @@
  - Build a more simple yet powerful controller using ESP32/ESPHome
  - Utilize i2c bus to use Atlas Sensors to their fullest, i.e. be able to calibrate sensors. Use more sensors including filter pressure sensor.
  - Control Variable Speed Motor
- - 
  
  ## Optional
  For pumps <= 1.5 HP, a external sensor to measure power consumption and [safe motor](https://en.wikipedia.org/wiki/Magnetic_starter) (based on sonoff POW)
