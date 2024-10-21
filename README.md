@@ -31,10 +31,11 @@
  Flash Ezo Sensors into UART mode by following the directions in their respective datasheets.
  
  ## Install
- 0. Install [hassbian](https://www.home-assistant.io/docs/installation/hassbian/installation/) in a raspberry pi (3 or 4 [not tested on pi 5]), and give wifi connection.
- 1. Copy 'custom_components', 'packages' folders (with all paths and contents) and 'ui-lovelace.yaml' frontend file in homeassistant conf_dir ( i.e. /home/homeassistant/.homeassistant/ ).
- 2. Modify your 'configuration.yaml' (including '  packages: !include_dir_named packages', disabling automations, scripts and groups, discovery and lovelace in yaml mode) as example in code
- 3. Create/modify proper 'secrets.yaml' for apis (latitude/longitude, pushbullet api, openweathermap api, etc).
+ 1. Install [hassbian](https://www.home-assistant.io/docs/installation/hassbian/installation/) in a raspberry pi (3 or 4 [not tested on pi 5]), and give wifi connection.
+ 2. Replace the included 'config.txt' with your rpi boot device config.txt file (sd card/ssd).
+ 3. Copy 'custom_components', 'packages' folders (with all paths and contents) and 'ui-lovelace.yaml' frontend file in homeassistant conf_dir ( i.e. /home/homeassistant/.homeassistant/ ).
+ 4. Modify your 'configuration.yaml' (including '  packages: !include_dir_named packages', disabling automations, scripts and groups, discovery and lovelace in yaml mode) as example in code
+ 5. Create/modify proper 'secrets.yaml' for apis (latitude/longitude, pushbullet api, openweathermap api, etc).
 
   ## Default Setup:
  - The current code is setup for the following:
