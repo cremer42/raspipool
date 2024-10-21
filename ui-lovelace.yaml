@@ -1,10 +1,10 @@
 title: Raspipool
 views:
   - badges:
-      - sensor.exterior_temperature
+      - sensor.openweathermap_temperature
       - sensor.e_fc
       - sensor.cycle_pool
-      - sensor.exterior_condition
+      - sensor.openweathermap_condition
     title: Pool
     panel: false
     icon: 'mdi:pool'
@@ -12,45 +12,89 @@ views:
       - type: vertical-stack
         cards:
           - type: horizontal-stack
+            title: Analogs (60 min Avg.)
             cards:
-              - max: 35
-                min: 22
+              - max: 110
+                min: 60
                 theme: Backend-selected
-                entity: sensor.pool_water_temperature
-                severity:
-                  green: 27
-                  red: 33
-                  yellow: 31
-                name: temp
+                entity: sensor.pre_filter_temp
+                segments:
+                  - from: 60
+                    color: '#db4437'
+                  - from: 70
+                    color: '#ffa600'
+                  - from: 80
+                    color: '#43a047'
+                  - from: 90
+                    color: '#ffa600'
+                  - from: 100
+                    color: '#db4437'
+                name: Pre Filter
                 type: gauge
-              - max: 8
-                min: 6.5
+                needle: true
+              - max: 110
+                min: 60
+                theme: Backend-selected
+                entity: sensor.post_filter_temp
+                segments:
+                  - from: 60
+                    color: '#db4437'
+                  - from: 70
+                    color: '#ffa600'
+                  - from: 80
+                    color: '#43a047'
+                  - from: 90
+                    color: '#ffa600'
+                  - from: 100
+                    color: '#db4437'
+                name: Post Heater
+                type: gauge
+                needle: true
+              - max: 10
+                min: 4
                 theme: Backend-selected
                 entity: sensor.ph_mean
-                severity:
-                  green: 6.95
-                  red: 7.75
-                  yellow: 7.35
-                name: ph
+                segments:
+                  - from: 4
+                    color: '#db4437'
+                  - from: 6.7
+                    color: '#ffa600'
+                  - from: 7.0
+                    color: '#43a047'
+                  - from: 7.9
+                    color: '#ffa600'
+                  - from: 8.5
+                    color: '#db4437'
+                name: pH
                 type: gauge
+                needle: true
               - max: 1999
-                min: -1999
+                min: -1000
                 theme: Backend-selected
                 entity: sensor.orp_mean
-                severity:
-                  green: 650
-                  red: 800
-                  yellow: 600
-                name: orp
+                segments:
+                  - from: -1000
+                    color: '#db4437'
+                  - from: 0
+                    color: '#ffa600'
+                  - from: 625
+                    color: '#43a047'
+                  - from: 850
+                    color: '#ffa600'
+                  - from: 1000
+                    color: '#db4437'
+                name: ORP
                 type: gauge
+                needle: true
           - show_name: false
+            title: Current Analogs
             entities:
-              - entity: sensor.pool_water_temperature
+              - entity: sensor.pre_filter_temp
                 hold_action:
                   action: call-service
                   service: homeassistant.update_entity
                   service_data:
-                    entity_id: sensor.pool_water_temperature
+                    entity_id: sensor.pre_filter_temp
               - entity: sensor.ezo_ph
                 hold_action:
                   action: call-service
@@ -65,7 +109,7 @@ views:
                     entity_id: sensor.ezo_orp
             type: glance
             show_state: true
-          - title: prueba
+          - title:
             type: horizontal-stack
             cards:
               - max: 20
@@ -76,33 +120,36 @@ views:
                   green: 15
                   red: 5
                   yellow: 10
-                name: remain cycles
+                name: Remaining Cycles
                 type: gauge
-              - max: 10
+              - max: 4
                 min: 0
                 theme: default
                 entity: sensor.muriatic_tank
                 severity:
-                  green: 5
-                  red: 1
-                  yellow: 3
+                  green: 3
+                  red: .5
+                  yellow: 1.5
                 type: gauge
-              - max: 15
+              - max: 4
                 min: 0
                 theme: default
                 entity: sensor.bleach_tank
                 severity:
-                  green: 8
-                  red: 0
-                  yellow: 3
+                  green: 3
+                  red: .5
+                  yellow: 1.5
                 type: gauge
-          - show_name: true
+          - title: Control
             entities:
               - entity: switch.pump
-                hold_action:
+                tap_action:
                   action: toggle
-              - entity: switch.turbo
-                hold_action:
+              - entity: switch.vacuum
+                tap_action:
+                  action: toggle      
+              - entity: switch.light
+                tap_action:
                   action: toggle
               - entity: binary_sensor.muriatic
                 hold_action:
@@ -123,45 +170,76 @@ views:
                   action: navigate
                   navigation_path: /lovelace/2
             type: glance
-            show_state: false
+            show_state: true
             show_icon: true
+  - badges: []
+    title: Heater
+    panel: false
+    icon: 'mdi:water-boiler'
+    cards:
+      - type: thermostat
+        entity: climate.pool_heater
+        name: Pool Heater
+      - type: history-graph
+        title: Last 24 Hours
+        entities:
+          - entity: climate.pool_heater    
+        hours_to_show: 24
   - badges: []
     title: History
     panel: true
     icon: 'mdi:chart-line'
-    cards:
+    cards:    
       - type: horizontal-stack
         cards:
-          - title: last 3 hours
+          - title: Last Hour
             entities:
-              - entity: sensor.pump_state
+              - entity: switch.pump
+                name: Pump
               - entity: switch.orp
                 name: Bleach inj.
               - entity: switch.ph
                 name: Muriatic inj.
-              - entity: sensor.ph_mean
-                name: pH
+              - entity: sensor.pre_filter_temp
+                name: Pre-Filter Temp
               - entity: sensor.orp_mean
                 name: ORP
-              - entity: sensor.pool_water_temperature
-                name: water temp.
+              - entity: sensor.ph_mean
+                name: pH
             type: history-graph
-            hours_to_show: 3
-          - title: last 3 days
+            hours_to_show: 1
+          - title: Last 6 Hours
             entities:
-              - entity: sensor.pump_state
+              - entity: switch.pump
+                name: Pump
               - entity: switch.orp
                 name: Bleach inj.
               - entity: switch.ph
                 name: Muriatic inj.
-              - entity: sensor.ph_mean
-                name: pH
+              - entity: sensor.pre_filter_temp
+                name: Pre-Filter Temp
               - entity: sensor.orp_mean
                 name: ORP
-              - entity: sensor.pool_water_temperature
-                name: water temp.
+              - entity: sensor.ph_mean
+                name: pH
             type: history-graph
-            hours_to_show: 72
+            hours_to_show: 6
+          - title: Last 3 Days
+            entities:
+              - entity: switch.pump
+                name: Pump
+              - entity: switch.orp
+                name: Bleach inj.
+              - entity: switch.ph
+                name: Muriatic inj.
+              - entity: sensor.pre_filter_temp
+                name: Pre-Filter Temp    
+              - entity: sensor.orp_mean
+                name: ORP
+              - entity: sensor.ph_mean
+                name: pH
+            type: history-graph
+            hours_to_show: 172
   - badges: []
     title: Chemical
     panel: true
@@ -211,9 +289,9 @@ views:
           - entity: input_number.notify_cycles
           - entity: input_boolean.notify_seasson
           - entity: input_number.notify_muriatic_high
+          - entity: input_number.notify_bleach_high
           - entity: input_number.notify_muriatic_tank
           - entity: input_number.notify_bleach_tank
-          - entity: input_number.notify_bleach_high
         type: entities
         show_header_toggle: true
   - badges: []
@@ -224,20 +302,30 @@ views:
         entities:
           - label: Pool
             type: section
+          - entity: input_boolean.summer_mode
+            name: Summer Mode
           - entity: input_number.capacity
             name: Capacity
           - entity: input_number.quality
             name: Quality
-          - entity: input_datetime.recirculation
-            name: Turnover rate
-          - entity: input_boolean.turbo
-          - entity: input_number.turbo
+#          - entity: input_datetime.recirculation
+#          - entity: input_number.recirculation_time
+#            name: Turnover rate
+#          - entity: input_boolean.turbo
+#          - entity: input_number.turbo
+#Below inputs are added for testing new logic
+#          - entity: input_number.pump_on_for
           - label: Filter
             type: section
           - entity: input_datetime.cycle_start
+          - entity: input_number.first_cycle
+          - entity: input_number.cycle_delay
           - entity: input_number.second_cycle
           - entity: sensor.cycle_pool
           - entity: input_number.cycle
+#Below inputs are added for testing new logic          
+#          - entity: input_number.recirculation_time
+#          - entity: input_number.cycles_per_day
         type: entities
         show_header_toggle: false
         theme: default
@@ -261,19 +349,24 @@ views:
             name: pH actual
           - entity: input_number.muriatic_inject
             name: Next muriatic injection (ml)
+          - label: ORP
+            type: section
+          - entity: input_number.orp_target
         type: entities
         show_header_toggle: false
   - badges:
       - sun.sun
       - sensor.time
       - sensor.cycle_pool
+      - sensor.raspipool_panel_temp
       - input_number.out_of_order
     title: Advanced
-    icon: 'mdi:settings'
+    panel: false
+    icon: 'mdi:cog'
     cards:
       - type: horizontal-stack
         cards:
-          - icon_height: 64px
+          - icon_height: 72px
             type: entity-button
             tap_action:
               action: none
@@ -283,7 +376,7 @@ views:
             show_icon: true
             hold_action:
               action: more-info
-          - icon_height: 64px
+          - icon_height: 72px
             type: entity-button
             tap_action:
               action: more-info
@@ -296,7 +389,7 @@ views:
               service: automation.trigger
               service_data:
                 entity_id: automation.reset_cummulated_flow_start
-          - icon_height: 64px
+          - icon_height: 72px
             type: entity-button
             tap_action:
               action: none
@@ -311,4 +404,3 @@ views:
           - entity: sensor.cummulated_flow_high
           - entity: sensor.cummulated_flow_low
         type: entities
-        
