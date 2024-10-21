@@ -2,18 +2,12 @@ sensor:
   - platform: template
     sensors:
       pool_temp:
-        friendly_name: "Pool Temp."
-        entity_id: sensor.pool_water_temperature
-        value_template: "{{ states('sensor.pool_water_temperature')|float|round(1) }}"
+        friendly_name: "Pool Temp"
+        entity_id: sensor.pre_filter_temp
+        value_template: "{{ states('sensor.pre_filter_temp')|float|round(1) }}"
         # icon_template: mdi:coolant-temperature
         icon_template: mdi:oil-temperature
-        unit_of_measurement: 'ºC'
-
-  - platform: onewire
-    names:
-#      28-011564d449ff: Pool water
-      28-031504ae5eff: Pool water
-    scan_interval: 31536000
+        unit_of_measurement: 'ºF'
 
 automation:
 - alias: temp_low
@@ -21,8 +15,8 @@ automation:
   initial_state: true
   trigger:
   - platform: numeric_state
-    entity_id: sensor.pool_water_temperature
-    below: 7
+    entity_id: sensor.pre_filter_temp
+    below: 70
     for:
       hours: 48
   condition: []
@@ -31,15 +25,15 @@ automation:
       message: '{{trigger.to_state.attributes.friendly_name}}: {{trigger.to_state.state}}{{-
         "\n\n" -}}@{{now().strftime("%H:%M")}}[{{now().day}}/{{now().month}}]'
       title: 'temperature low ({{trigger.to_state.state}})!!!'
-    service: notify.pushbullet
-
+#    service: notify.pushbullet
+#    service: notify.#changeme
 - alias: temp_high
   id: '1559049959765'
   initial_state: true
   trigger:
   - platform: numeric_state
-    entity_id: sensor.pool_water_temperature
-    above: 32
+    entity_id: sensor.pre_filter_temp
+    above: 90
     for:
       hours: 48
   condition: []
@@ -48,5 +42,39 @@ automation:
       message: '{{trigger.to_state.attributes.friendly_name}}: {{trigger.to_state.state}}{{-
         "\n\n" -}}@{{now().strftime("%H:%M")}}[{{now().day}}/{{now().month}}]'
       title: 'temperature high ({{trigger.to_state.state}})!!!'
-    service: notify.pushbullet
+#    service: notify.pushbullet
+#    service: notify.#changeme
 
+- alias: panel_temp_high
+  id: '155904978675'
+  initial_state: true
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.raspipool_panel_temp
+    above: 100
+    for:
+      minutes: 20
+  condition: []
+  action: 
+  - data_template:
+      message: "@ {{now().strftime('%H:%M')}} on [{{now().month}}/{{now().day}}]"
+      title: "Panel Temp HI ({{states('sensor.raspipool_panel_temp')}})"
+#    service: notify.pushbullet
+#    service: notify.#changeme
+    
+- alias: panel_temp_high
+  id: '15234049845420'
+  initial_state: true
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.raspipool_panel_temp
+    above: 105
+    for:
+      minutes: 60
+  condition: []
+  action:
+  - data_template:
+      message: "@ {{now().strftime('%H:%M')}} on [{{now().month}}/{{now().day}}]"
+      title: "RaspiPool Panel Temp HIGH ({{states('sensor.raspipool_panel_temp')}}F)"
+#    service: notify.pushbullet
+#    service: notify.#changeme
