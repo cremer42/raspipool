@@ -1,18 +1,28 @@
 sensor:
   - platform: atlas_scientific
-#    port: /dev/ttyUSB0
-    port: /dev/ttyAMA0
-#    scan_interval: 60
-    scan_interval: 31536000
-#    scan_interval: 10
+# For serial ports use:
+    port: /dev/ttyAMA1
+# For I2C enter the hex device id
+#    port: 0x63
+#    offset: 0.5
+    scan_interval: 180
+    
+#  - platform: template
+#    sensors:
+#      ph_corrected:
+#        unique_id: ph_corrected
+#        friendly_name: "pH Corrected"
+#        unit_of_measurement: "pH Adj."  # Replace with the appropriate unit for your sensor.
+#        value_template: "{{ (states('sensor.ezo_ph') | float * 1.03) | round(2) }}"
+#        # Replace 'correction_factor' with the actual value of your correction factor.    
 
   - platform: statistics
-    name: ph
+    name: ph_mean
+    state_characteristic: mean
     entity_id: sensor.ezo_ph
     max_age:
-      minutes: 10
-    # precision: 3
-
+      minutes: 60
+    precision: 1
 input_number:
   ph_target:
     min: 6.5
@@ -21,6 +31,7 @@ input_number:
     unit_of_measurement: 'pH'
     icon: mdi:alpha-h-circle-outline
     mode: box
+    name: Target pH
 
 automation:
 - alias: ph_start
@@ -44,7 +55,7 @@ automation:
   trigger:
   - platform: numeric_state
     entity_id: sensor.ph_mean
-    above: 7.5
+    above: 7.7
     for:
       hours: 48
   condition: []
@@ -53,7 +64,8 @@ automation:
       message: '{{trigger.to_state.attributes.friendly_name}}: {{trigger.to_state.state}}{{-
         "\n\n" -}}@{{now().strftime("%H:%M")}}[{{now().day}}/{{now().month}}]'
       title: 'pH high ({{trigger.to_state.state}})!!!'
-    service: notify.pushbullet
+#    service: notify.pushbullet
+    service: notify.jason
 
 - alias: ph_low
   id: '1559049839760'
@@ -61,7 +73,7 @@ automation:
   trigger:
   - platform: numeric_state
     entity_id: sensor.ph_mean
-    below: 6.9
+    below: 7.1
     for:
       hours: 48
   condition: []
@@ -70,7 +82,8 @@ automation:
       message: '{{trigger.to_state.attributes.friendly_name}}: {{trigger.to_state.state}}{{-
         "\n\n" -}}@{{now().strftime("%H:%M")}}[{{now().day}}/{{now().month}}]'
       title: 'pH low ({{trigger.to_state.state}})!!!'
-    service: notify.pushbullet
+#    service: notify.pushbullet
+    service: notify.jason
 
 - alias: ph_bad
   id: '1559049893756'
@@ -98,4 +111,3 @@ automation:
   action:
     - service: automation.trigger
       entity_id: automation.muriatic_set
-  
