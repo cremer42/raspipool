@@ -1,7 +1,7 @@
 # raspipool
 **Swimming-Pool Automation Systen with Raspberry Pi + Home Assistant**
 
-<img src="/help/media/raspipool_main2.png" height="256">
+<img src="/help/media/overview_main.png" height="256">
 
 ## Overview:
 
