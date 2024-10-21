@@ -3,8 +3,7 @@ homeassistant:
   # Location required to calculate the time the sun rises and sets
   latitude: !secret latitude
   longitude: !secret longitude
-  unit_system: metric
-  customize: !include customize.yaml
+# customize: !include customize.yaml
   packages: !include_dir_named packages
 default_config:
 # Disable Discover some devices automatically
@@ -14,12 +13,23 @@ tts:
 logger:
   default: critical
   logs:
-    homeassistant.components.sensor.atlas_scientific: debug
-    homeassistant.components.switch.command_line: debug
+    homeassistant.custom_components.sensor.atlas_scientific: debug
+    homeassistant.custom_components.switch.command_line: debug
 
-group: !include groups.yaml
+# group: !include groups.yaml
 # Disable automation
-# automation: !include automations.yaml
-script: !include scripts.yaml
+automation: !include automations.yaml
+# script: !include scripts.yaml
 lovelace:
-  mode: yaml
+ mode: yaml
+# Telegram Bot
+telegram_bot:
+  - platform: polling
+    api_key: #replace with your key
+    allowed_chat_ids:
+      - #replace with your id
+# Notifier
+notify:
+  - platform: telegram
+    name: "xxxx"
+    chat_id: #replace with your id
