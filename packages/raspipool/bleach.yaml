@@ -2,7 +2,8 @@ sensor:
   - platform: template
     sensors:
       bleach_tank:
-        friendly_name: "Bleach tank"
+        friendly_name: "Bleach Tank"
+        unique_id: bleach_tank
         value_template: "{{ states('input_number.bleach_tank')|round(2)}}"
 
   - platform: history_stats
@@ -24,10 +25,11 @@ sensor:
 input_number:
   bleach_tank:
     min: 0
-    max: 50
+    max: 18.92
     step: 0.1
     unit_of_measurement: 'l'
     icon: mdi:blood-bag
+    name: Bleach Tank
   bleach_concentration:
     min: 1
     max: 15
@@ -35,23 +37,27 @@ input_number:
     unit_of_measurement: '%'
     icon: mdi:water-percent
     mode: box
+    name: Bleach Concentration
   bleach_speed:
     min: 10
     max: 100
     step: 1
     unit_of_measurement: 'ml/min'
     icon: mdi:needle
+    name: Bleach Speed
   notify_bleach_high:
     min: 0
     max: 15
     step: 0.1
     unit_of_measurement: 'l/48h'
+    name: Notify Bleach HIGH
   notify_bleach_tank:
      min: 0
      max: 5
      step: 0.5
      unit_of_measurement: 'l'
      icon: mdi:flask-empty-outline
+     name: Notify Bleach Tank LOW
   bleach_inject:
     min: 0
     max: 20000
@@ -59,6 +65,7 @@ input_number:
     unit_of_measurement: 'ml'
     icon: mdi:beaker
     mode: box
+    name: Bleach Inject
 
 
 automation:
@@ -84,9 +91,10 @@ automation:
   condition: []
   action:
   - data_template:
-      message: "@{{now().strftime('%H:%M')}}[{{now().day}}/{{now().month}}]"
-      title: "Bleach tank low ({{states('input_number.bleach_tank')|float}} liters )!!!"
-    service: notify.pushbullet
+      message: "@ {{now().strftime('%H:%M')}} on [{{now().month}}/{{now().day}}]"
+      title: "Bleach Tank LOW ({{states('input_number.bleach_tank')|float}} liters )"
+#    service: notify.pushbullet
+    service: notify.jason
 
 - alias: bleach_high
   id: '1559049844490'
@@ -101,9 +109,10 @@ automation:
   - entity_id: input_boolean.lock_bleach
     service: input_boolean.turn_on
   - data_template:
-      message: "{{now().strftime('%H:%M')}}[{{now().day}}/{{now().month}}]"
-      title: "Bleach inject blocked ({{states('input_number.notify_bleach_high')}} in 48 hours)!!!"
-    service: notify.pushbullet
+      message: "@ {{now().strftime('%H:%M')}} on [{{now().month}}/{{now().day}}]"
+      title: "Bleach Injection BLOCKED ({{states('input_number.notify_bleach_high')}} in 48 hours)"
+#    service: notify.pushbullet
+    service: notify.jason
 
 - alias: bleach_set
   id: '1559149839459'
@@ -127,20 +136,23 @@ automation:
     state: 'off'
   - condition: numeric_state
     entity_id: input_number.bleach_inject
-    value_template: "{{ states('input_number.bleach_inject')|float / states('input_number.capacity')|float }}"
+    value_template: "{{ states('input_number.capacity')|float / states('input_number.bleach_inject')|float }}"
     above: 10.0
     below: 200.0
   - entity_id: switch.orp
     service: switch.turn_on
   - data_template:
-      message: "{{now().strftime('%H:%M')}}[{{now().day}}/{{now().month}}]"
-      title: "Bleach injection: ({{states('input_number.bleach_inject')}} ml)!!!"
-    service: notify.pushbullet
+      message: "{{now().strftime('%H:%M')}} on [{{now().month}}/{{now().day}}]"
+      title: "Bleach Injection Started: ({{states('input_number.bleach_inject')}} ml)"
+#    service: notify.pushbullet
+    service: notify.jason
+    
   - delay: 00:00:{{ [0 , 60 * states('input_number.bleach_inject')|float/ states('input_number.bleach_speed')|float ]|max|int }}
   - entity_id: switch.orp
     service: switch.turn_off
   - data_template:
-      message: "{{now().strftime('%H:%M')}}[{{now().day}}/{{now().month}}]"
-      title: "Bleach injection end!!!"
-    service: notify.pushbullet
+      message: "@ {{now().strftime('%H:%M')}} on [{{now().month}}/{{now().day}}]"
+      title: "Bleach Injection Complete"
+#    service: notify.pushbullet
+    service: notify.jason
 
