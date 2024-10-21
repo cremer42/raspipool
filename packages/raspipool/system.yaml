@@ -3,10 +3,10 @@ sensor:
   - platform: command_line
     name: RPI Temperature
     command: "cat /sys/class/thermal/thermal_zone0/temp"
-    unit_of_measurement: "°C"
+    unit_of_measurement: "°F"
     value_template: '{{ value | multiply(0.001) | round(1) }}'
-  - platform: systemmonitor
-    resources:
-      - type: disk_use_percent
-        arg: /
-      - type: last_boot
+#  - platform: systemmonitor
+#    resources:
+#      - type: disk_use_percent
+#        arg: /
+#      - type: last_boot
