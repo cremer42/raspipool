@@ -12,10 +12,11 @@ input_datetime:
 
 input_number:
   capacity:
-    name: Pool capacity (m3)
-    min: 5
-    max: 100
-    unit_of_measurement: m3
+    name: Pool capacity (gal)
+    min: 1000
+    max: 20000
+    unit_of_measurement: gal
+    mode: box
     icon: mdi:water-pump
   quality:
     name: Pool quality
@@ -30,6 +31,23 @@ input_number:
     step: 5
     unit_of_measurement: '%'
     icon: mdi:circle-slice-2
+#Items below added for new pump control testing    
+  recirculation_time:
+    name: Recirculation Time
+    min: 0
+    max: 1440
+    step: 10
+    unit_of_measurement: 'Minutes'
+    mode: box
+    icon: mdi:clock   
+  cycles_per_day:
+    name: Pump Cycles Per Day
+    min: 0
+    max: 10
+    step: .5
+    unit_of_measurement: 'Cycles'
+    mode: box
+    icon: mdi:counter
 
 
 input_boolean:
@@ -60,11 +78,11 @@ automation:
   - service: input_number.set_value
     data_template:
       entity_id: input_number.capacity
-      value: 50
+      value: 14500
   - service: input_number.set_value
     data_template:
       entity_id: input_number.quality
-      value: 4
+      value: 7
   - service: input_number.set_value
     data_template:
       entity_id: input_number.bleach_tank
@@ -88,7 +106,7 @@ automation:
   - service: input_number.set_value
     data_template:
       entity_id: input_number.ph_target
-      value: 7.2
+      value: 7.6
   - service: input_number.set_value
     data_template:
       entity_id: input_number.muriatic_tank
