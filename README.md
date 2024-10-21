@@ -9,10 +9,10 @@
 
 - Automatic filter control (fixed and dual-speed pumps, 1 or 2 daily cycles) based on time or temperature. (default files are set for fixed speed pump and a set start time)
 - 3 sensors:
-  - water temperature (one-wire [DS18B20 waterproof](https://aliexpress.com/item/32968031204.html))
-  - [ph](https://www.atlas-scientific.com/embedded-solutions/ezo-ph-circuit)
-  - [orp](https://www.atlas-scientific.com/embedded-solutions/ezo-orp-circuit)
-  - [EZO carrier board](https://www.atlas-scientific.com/carrier-boards/electrically-isolated-ezo-carrier-board-gen-2).
+  - water temperature (one-wire [DS18B20 Waterproof Sensor](https://aliexpress.com/item/32968031204.html))
+  - [Ezo ph Circuit](https://www.atlas-scientific.com/embedded-solutions/ezo-ph-circuit)
+  - [Ezo orp Circuit](https://www.atlas-scientific.com/embedded-solutions/ezo-orp-circuit)
+  - [EZO Carrier Board](https://www.atlas-scientific.com/carrier-boards/electrically-isolated-ezo-carrier-board-gen-2).
     -  A custom UART sensor for HA has been developed in the included code.
 - Relay Board with a minimun of [4 relays](https://aliexpress.com/item/32961638909.html) [or 6](https://aliexpress.com/item/32997012084.html)
   This project used the 6 relay rpi hat.
