@@ -1,0 +1,32 @@
+climate:
+  - platform: generic_thermostat
+    name: Pool Heater
+    heater: switch.heater
+    target_sensor: sensor.pre_filter_temp
+    min_temp: 60
+    max_temp: 100
+    ac_mode: false
+#    target_temp: 85
+    cold_tolerance: 1.5
+    hot_tolerance: 1.5
+    min_cycle_duration:
+      seconds: 5
+    keep_alive:
+      minutes: 3
+    initial_hvac_mode: "off"
+    away_temp: 70
+    precision: .1
+    
+automation:
+      - alias: "Lock out Heater when Pump isnt running"
+        trigger:
+          platform: state
+          entity_id: climate.pool_heater
+          to: "heat"
+        condition:
+          condition: state
+          entity_id: switch.pump
+          state: 'off'
+        action:
+          service: climate.turn_off
+          entity_id: climate.pool heater
