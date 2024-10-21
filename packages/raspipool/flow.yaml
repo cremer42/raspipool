@@ -43,14 +43,14 @@ sensor:
 
 input_datetime:
   cummulated_flow_start:
-    name: Cummulated Flow Start
     has_date: true
     has_time: true
     icon: mdi:timer
+    name: Cummulated Pump Runtime
 
 input_number:
   notify_cycles:
-    name: Notify cycles flow
+    name: Notify Cycles Elapsed
     icon: mdi:timer
     min: 0
     max: 100
@@ -70,9 +70,10 @@ automation:
     above: 0
   action:
   - data_template:
-      message: "in low speed: {{state_attr('sensor.cummulated_flow_low','value')}}{{'\n'}}in high speed: {{state_attr('sensor.cummulated_flow_high','value')}}{{'\n'}}@{{now().strftime('%H:%M')}}[{{now().day}}/{{now().month}}]"
+      message: "In low speed: {{state_attr('sensor.cummulated_flow_low','value')}}{{'\n'}}In high speed: {{state_attr('sensor.cummulated_flow_high','value')}}{{'\n'}}@{{now().strftime('%H:%M')}} on [{{now().month}}/{{now().day}}]"
       title: "Flow: {{states('input_number.notify_cycles')|int}} cycles reached!!!"
-    service: notify.pushbullet
+#    service: notify.pushbullet
+    service: notify.jason
 
 - alias: reset_cummulated_flow_start
   id: '1559293506609'
