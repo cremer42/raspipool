@@ -1,11 +1,11 @@
-notify:
-  - platform: pushbullet
-    api_key: !secret pushbullet_api_key
-    name: pushbullet
+# notify:
+#  - platform: pushbullet
+#    api_key: !secret pushbullet_api_key
+#    name: pushbullet
 
 input_boolean:
   notify_seasson:
-    name: Notify seasson changes
+    name: Notify season changes
     icon: mdi:comment-alert
 
 
@@ -28,7 +28,8 @@ automation:
   - data_template:
       message: "@{{now().strftime('%H:%M')}}[{{now().day}}/{{now().month}}]"
       title: 'Winter is comming!!!'
-    service: notify.pushbullet
+#    service: notify.pushbullet
+#    service: notify.#changeme
 
 - alias: summer_session
   id: '1559049956785'
@@ -47,5 +48,7 @@ automation:
   - data_template:
       message: "@{{now().strftime('%H:%M')}}[{{now().day}}/{{now().month}}]"
       title: "Summer is here!!!"
-    service: notify.pushbullet
+#    service: notify.pushbullet
+#    service: notify.#changeme
+
 
