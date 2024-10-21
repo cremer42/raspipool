@@ -4,11 +4,14 @@ recorder:
   include:
     entities:
       - sensor.pump_state
+      - switch.pump
       - sensor.pool_temp_mean
       - sensor.orp_mean
       - sensor.ph_mean
       - sensor.pool_water_temperature
+      - sensor.raspipool_panel_temp
       - sensor.ezo_ph
+      - sensor.ph_corrected
       - sensor.ezo_orp
       - sensor.remain_cycles
       - input_number.muriatic_tank
@@ -18,4 +21,10 @@ recorder:
       - switch.ph
       - switch.orp
       - sensor.e_fc
+      - sensor.pre_filter_temp
+      - sensor.post_filter_temp
+      - sensor.cummulated_flow_low
+      - sensor.bleach_on_last_hour
+      - sensor.muriatic_on_last_hour
+      - climate.pool_heater
 
