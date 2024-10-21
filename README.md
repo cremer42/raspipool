@@ -18,9 +18,7 @@
   - [4 Relay Hat](https://aliexpress.com/item/32961638909.html)
   - [6 Relay Hat](https://aliexpress.com/item/32997012084.html)
   This project used the 6 relay rpi hat.
-   - controlling :
-    -  pump on/off and pump speed (high/low)
-    -  muriatic acid injection (to regulate pH) and bleach injection (to mantain sanitization level)
+   - controlling : pump on/off and pump speed (high/low), muriatic acid injection (to regulate pH) and bleach injection (to mantain sanitization level).
  
  System is intended to monitoring and automatically control most important functions and notify to mobile all possible events.
 
