@@ -2,6 +2,8 @@
 **Swimming-Pool Automation Systen with Raspberry Pi + Home Assistant**
 
 <img src="help/media/Overview_Main.png" height="256">
+<img src="help/media/Settings.png" height="256">
+<img src="help/media/Heater.png" height="256">
 
 ## Overview:
 
